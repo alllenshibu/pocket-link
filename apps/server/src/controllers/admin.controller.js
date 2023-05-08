@@ -46,6 +46,7 @@ const addNewLinkMappingController = (req, res) => {
         return res.status(200).json({ key_link: key_link, destination_url: destination_url })
     }
     catch (err) {
+        console.log(err.message)
         return res.status(500).json({ error: err.message })
     }
 
