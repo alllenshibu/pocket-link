@@ -1,0 +1,14 @@
+version: "3.3"
+
+services:
+
+  pocketlink-client:
+    image: pocketlink-client
+    build: ./apps/client
+    ports:
+      - 3000:3000
+  pocketlink-server:
+    image: pocketlink-server
+    build: ./apps/server
+    ports:
+      - 3001:3001      

@@ -2,22 +2,28 @@ const db = require('../lib/sqlite.js')
 
 
 const resolveNewHitController = (req, res) => {
-    const key_link = req.params.key_url
-    if (!key_link || key_link.length < 3 || key_link === undefined) {
+    const slug = req.params.key_url
+    if (!slug || slug.length < 3 || slug === undefined) {
         return res.status(400).json({ error: 'Key link is required' })
     }
     try {
         db.serialize(() => {
-            console.log(key_link)
+            console.log(slug)
             let destination
-            db.get('SELECT * FROM link WHERE key_link = ?', [key_link], function (err, rows) {
+            db.get('SELECT * FROM link WHERE slug = ?', [slug], function (err, rows) {
                 if (err) {
                     return res.status(500).json({ error: err.message })
                 }
-                destination = rows?.destination_url
+
+                destination = rows?.destination
                 res.redirect(301, destination)
             })
-
+            db.run('UPDATE link SET hits = hits + 1 WHERE slug = ?', [slug], function (err, row) {
+                if (err) {
+                    console.log(err.message);
+                }
+                console.log(row);
+            })
         })
 
     }

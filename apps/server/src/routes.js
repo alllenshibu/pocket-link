@@ -15,8 +15,8 @@ const router = express.Router();
 //             create table link
 //             (
 //                 id              integer primary key AUTOINCREMENT,
-//                 key_link        text not null,
-//                 destination_url text not null,
+//                 slug        text not null,
+//                 destination text not null,
 //                  hits           integer default 0
 //             );  
 //         `, (err) => {

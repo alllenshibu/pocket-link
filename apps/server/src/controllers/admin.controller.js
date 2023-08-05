@@ -6,7 +6,8 @@ const getAllLinkMappingsControler = (req, res) => {
     }
     try {
         db.serialize(() => {
-            db.all('SELECT * FROM link', function (err, rows) {
+
+            db.all('SELECT * FROM link ORDER BY created_at DESC', function (err, rows) {
                 if (err) {
                     return res.status(500).json({ error: err.message });
                 }
@@ -23,27 +24,32 @@ const getAllLinkMappingsControler = (req, res) => {
 const addNewLinkMappingController = (req, res) => {
 
 
-    const key_link = req?.body?.key_link
-    const destination_url = req?.body?.destination_url
+    const slug = req?.body?.slug
+    const destination = req?.body?.destination
+    const created_at = req?.body?.created_at
 
-    if (!key_link || key_link.length < 3 || key_link === undefined) {
+    if (!slug || slug.length < 3 || slug === undefined) {
         return res.status(400).json({ error: 'Key link is required' })
     }
 
-    if (!destination_url || destination_url.length < 3 || destination_url === undefined) {
+    if (!destination || destination.length < 3 || destination === undefined) {
         return res.status(400).json({ error: 'Destination url is required' })
+    }
+
+    if (!created_at || created_at === undefined) {
+        return res.status(400).json({ error: 'Created at is required' })
     }
 
     try {
         db.serialize(() => {
-            db.run('INSERT INTO link(key_link, destination_url) VALUES(?, ?)', [key_link, destination_url], function (err, row) {
+            db.run('INSERT INTO link(slug, destination, created_at) VALUES(?, ?, ?)', [slug, destination, created_at], function (err, row) {
                 if (err) {
                     console.log(err.message);
                 }
             })
         })
 
-        return res.status(200).json({ key_link: key_link, destination_url: destination_url })
+        return res.status(200).json({ slug: slug, destination: destination })
     }
     catch (err) {
         console.log(err.message)
