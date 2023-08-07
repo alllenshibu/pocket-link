@@ -8,22 +8,20 @@ const resolveNewHitController = (req, res) => {
     }
     try {
         db.serialize(() => {
-            console.log(slug)
             let destination
             db.get('SELECT * FROM link WHERE slug = ?', [slug], function (err, rows) {
                 if (err) {
                     return res.status(500).json({ error: err.message })
                 }
-
+                db.run('UPDATE link SET hits = hits + 1 WHERE slug = ?', [slug], function (err, row) {
+                    if (err) {
+                        console.log(err.message);
+                    }
+                })
                 destination = rows?.destination
                 res.redirect(301, destination)
             })
-            db.run('UPDATE link SET hits = hits + 1 WHERE slug = ?', [slug], function (err, row) {
-                if (err) {
-                    console.log(err.message);
-                }
-                console.log(row);
-            })
+
         })
 
     }

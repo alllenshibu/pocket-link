@@ -10,7 +10,6 @@ const db = require('./lib/sqlite')
 
 db.serialize(() => {
     db.all("select name from sqlite_master where type='table'", function (err, tables) {
-        console.log(tables);
         if (tables.length == 0) {
             db.serialize(() => {
                 db.run(`
@@ -44,5 +43,5 @@ app.use('/', require('./routes'))
 
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Pocketlink app listening on port ${port}`)
 })
