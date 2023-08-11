@@ -70,20 +70,23 @@ function App() {
           </button>
         </form>
         <div className="md:w-4/5 lg:w-3/5 mx-auto flex flex-col justify-center items-center">
-          <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   Created At
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   Slug
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   Destination
                 </th>
-                <th scope="col" class="px-6 py-3">
+                <th scope="col" className="px-6 py-3">
                   Hits
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Link
                 </th>
               </tr>
             </thead>
@@ -91,14 +94,32 @@ function App() {
               {urlMappings.map((urlMapping) => (
                 <tr
                   key={urlMapping.slug}
-                  class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                 >
-                  <td class="px-6 py-4">
+                  <td className="px-6 py-4">
                     {new Date(urlMapping.created_at).toLocaleString()}
                   </td>
-                  <td class="px-6 py-4">{urlMapping.slug}</td>
-                  <td class="px-6 py-4">{urlMapping.destination}</td>
-                  <td class="px-6 py-4">{urlMapping.hits}</td>
+                  <td className="px-6 py-4">{urlMapping.slug}</td>
+                  <td className="px-6 py-4">{urlMapping.destination}</td>
+                  <td className="px-6 py-4">{urlMapping.hits}</td>
+                  <td className="px-6 py-4">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const shortLink =
+                          import.meta.env.VITE_API_URL + "/" + urlMapping.slug
+                        if ("clipboard" in navigator) {
+                          await navigator.clipboard.writeText(shortLink)
+                          window.alert("Copied to clipboard")
+                          return
+                        } else {
+                          console.log("Uh oh")
+                        }
+                      }}
+                    >
+                      Copy
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
