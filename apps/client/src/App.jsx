@@ -20,6 +20,15 @@ function App() {
     e.preventDefault()
     let slug = e.target.slug.value
     let destination = e.target.destination.value
+
+    const testForWhiteSpaces = (s) => {
+      console.log(s)
+      return /\s/.test(s)
+    }
+
+    if (testForWhiteSpaces(slug) || testForWhiteSpaces(destination))
+      return window.alert("Please remove whitespaces")
+
     if (
       !destination.startsWith("http://") ||
       !destination.startsWith("https://")
