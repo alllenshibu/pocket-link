@@ -18,9 +18,14 @@ function App() {
 
   const addNewUrlMapping = async (e) => {
     e.preventDefault()
-    const slug = e.target.slug.value
-    const destination = e.target.destination.value
-    const created_at = new Date().toISOString()
+    let slug = e.target.slug.value
+    let destination = e.target.destination.value
+    if (
+      !destination.startsWith("http://") ||
+      !destination.startsWith("https://")
+    )
+      destination = "http://" + destination
+    let created_at = new Date().toISOString()
     const response = await axios.post(import.meta.env.VITE_API_URL + "/new", {
       slug,
       destination,
