@@ -30,8 +30,7 @@ function App() {
       return window.alert("Please remove whitespaces")
 
     if (
-      !destination.startsWith("http://") ||
-      !destination.startsWith("https://")
+      !(destination.startsWith("http://") || destination.startsWith("https://"))
     )
       destination = "http://" + destination
     let created_at = new Date().toISOString()
