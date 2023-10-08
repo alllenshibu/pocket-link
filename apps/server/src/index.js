@@ -1,18 +1,20 @@
+const express = require("express");
 
-const express = require('express')
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
-const bodyParser = require('body-parser')
-const cors = require('cors')
+require("dotenv").config();
 
-require('dotenv').config()
-
-const db = require('./lib/sqlite')
+const db = require("./lib/sqlite");
 
 db.serialize(() => {
-    db.all("select name from sqlite_master where type='table'", function (err, tables) {
-        if (tables.length == 0) {
-            db.serialize(() => {
-                db.run(`
+  db.all(
+    "select name from sqlite_master where type='table'",
+    function (err, tables) {
+      if (tables.length == 0) {
+        db.serialize(() => {
+          db.run(
+            `
                 create table link
                 (
                     slug        text primary key,
@@ -20,28 +22,27 @@ db.serialize(() => {
                     created_at  timestamp,  
                     hits        integer   default 0
                 );
-                            `, (err) => {
-                    if (err) {
-                        console.log(err.message);
-                    }
-                }
-                )
-            })
-        }
-    });
+                            `,
+            (err) => {
+              if (err) {
+                console.log(err.message);
+              }
+            }
+          );
+        });
+      }
+    }
+  );
 });
 
-const app = express()
-const port = process.env.PORT || 3000
+const app = express();
+const port = process.env.PORT || 3000;
 
-app.use(cors())
-app.use(bodyParser.json())
+app.use(cors());
+app.use(bodyParser.json());
 
-
-app.use('/', require('./routes'))
-
-
+app.use("/", require("./routes"));
 
 app.listen(port, () => {
-    console.log(`Pocketlink app listening on port ${port}`)
-})
+  console.log(`Pocketlink app listening on port ${port}`);
+});
